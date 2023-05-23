@@ -10,7 +10,7 @@ disablePathToLower: true
 summaryLength: 140
 #disqusShortname: yourdiscussshortname
 permalinks:
-  post: :title.html
+  post: /:title.html/
 
 author:
   name: Fanka
