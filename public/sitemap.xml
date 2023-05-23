@@ -4,18 +4,30 @@
   <url>
     <loc>http://www.fanka.eu.org/posts/InstallArchLinux2023-2-3.html</loc>
     <lastmod>2023-02-03T01:09:43+08:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
   </url><url>
     <loc>http://www.fanka.eu.org/</loc>
     <lastmod>2023-02-03T01:09:43+08:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
   </url><url>
     <loc>http://www.fanka.eu.org/posts.html</loc>
     <lastmod>2023-02-03T01:09:43+08:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
   </url><url>
     <loc>http://www.fanka.eu.org/posts/GithubPages&#43;Cloudflare.html</loc>
     <lastmod>2022-12-18T19:15:22+08:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
   </url><url>
     <loc>http://www.fanka.eu.org/categories.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
   </url><url>
     <loc>http://www.fanka.eu.org/tags.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
   </url>
 </urlset>
