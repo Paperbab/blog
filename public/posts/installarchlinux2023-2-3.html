@@ -1,0 +1,900 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    
+
+    <title>ArchLinux安装记录（2023.2.3） | Fanka</title>
+    <meta property="og:title" content="ArchLinux安装记录（2023.2.3） - Fanka">
+    <meta property="og:type" content="article">
+        
+    <meta property="article:published_time" content='2023-02-03T01:09:43&#43;08:00'>
+        
+        
+    <meta property="article:modified_time" content='2023-02-03T01:09:43&#43;08:00'>
+        
+    <meta name="Keywords" content="技术\学生\无聊\日志">
+    <meta name="description" content="ArchLinux安装记录（2023.2.3）">
+        
+    <meta name="author" content="Fanka">
+    <meta property="og:url" content="http://www.fanka.eu.org/posts/InstallArchLinux2023-2-3.html">
+    <link rel="shortcut icon" href='/favicon.ico'  type="image/x-icon">
+
+    <link rel="stylesheet" href='/css/normalize.css'>
+    <link rel="stylesheet" href='/css/style.css'>
+    <script type="text/javascript" src="//cdn.bootcdn.net/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    
+    
+    
+    
+    
+    
+        <link rel="stylesheet" href='/css/douban.css'>
+    
+        <link rel="stylesheet" href='/css/other.css'>
+    
+</head>
+
+<body>
+    <header id="header" class="clearfix">
+    <div class="container">
+        <div class="col-group">
+            <div class="site-name ">
+                
+                    <a id="logo" href="http://www.fanka.eu.org">
+                        Fanka
+                    </a>
+                
+                <p class="description">一个学生的无聊日志</p>
+            </div>
+            <div>
+                <nav id="nav-menu" class="clearfix">
+                    <a class="current" href="http://www.fanka.eu.org">Home</a>
+                    
+                    <a  href="http://www.fanka.eu.org/posts/" title="文章">文章</a>
+                    
+                    <a  href="http://www.fanka.eu.org/categories/" title="分类">分类</a>
+                    
+                    <a  href="http://www.fanka.eu.org/tags/" title="标签">标签</a>
+                    
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+
+    <div id="body">
+        <div class="container">
+            <div class="col-group">
+
+                <div class="col-8" id="main">
+                    
+<div class="res-cons">
+    <style type="text/css">
+    .post-toc {
+        position: fixed;
+        width: 200px;
+        margin-left: -210px;
+        padding: 5px 10px;
+        font-family: Athelas, STHeiti, Microsoft Yahei, serif;
+        font-size: 12px;
+        border: 1px solid rgba(0, 0, 0, .07);
+        border-radius: 5px;
+        background-color: rgba(255, 255, 255, 0.98);
+        background-clip: padding-box;
+        -webkit-box-shadow: 1px 1px 2px rgba(0, 0, 0, .125);
+        box-shadow: 1px 1px 2px rgba(0, 0, 0, .125);
+        word-wrap: break-word;
+        white-space: nowrap;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        z-index: 999;
+        cursor: pointer;
+        max-height: 70%;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    .post-toc .post-toc-title {
+        width: 100%;
+        margin: 0 auto;
+        font-size: 20px;
+        font-weight: 400;
+        text-transform: uppercase;
+        text-align: center;
+    }
+
+    .post-toc .post-toc-content {
+        font-size: 15px;
+    }
+
+    .post-toc .post-toc-content>nav>ul {
+        margin: 10px 0;
+    }
+
+    .post-toc .post-toc-content ul {
+        padding-left: 20px;
+        list-style: square;
+        margin: 0.5em;
+        line-height: 1.8em;
+    }
+
+    .post-toc .post-toc-content ul ul {
+        padding-left: 15px;
+        display: none;
+    }
+
+    @media print,
+    screen and (max-width:1057px) {
+        .post-toc {
+            display: none;
+        }
+    }
+</style>
+<div class="post-toc" style="position: absolute; top: 188px;">
+    <h2 class="post-toc-title">Table of Contents</h2>
+    <div class="post-toc-content">
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#连接网络">连接网络</a></li>
+    <li><a href="#切换镜像源">切换镜像源</a></li>
+    <li><a href="#更新系统时间">更新系统时间</a></li>
+    <li><a href="#磁盘分区">磁盘分区</a></li>
+    <li><a href="#格式化分区">格式化分区</a></li>
+    <li><a href="#挂载分区">挂载分区</a></li>
+    <li><a href="#安装内核和其他软件">安装内核和其他软件</a></li>
+    <li><a href="#生成fstap文件">生成fstap文件</a></li>
+    <li><a href="#chroot进入新系统">Chroot进入新系统</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#设置时区">设置时区</a></li>
+    <li><a href="#设置语言">设置语言</a></li>
+    <li><a href="#设置环境变量">设置环境变量</a></li>
+    <li><a href="#系统命名">系统命名</a></li>
+    <li><a href="#生成hosts文件">生成hosts文件</a></li>
+    <li><a href="#安装必备包">安装必备包</a></li>
+    <li><a href="#配置grub">配置grub</a></li>
+    <li><a href="#给root用户创建密码">给root用户创建密码</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#创建一个本地普通用户">创建一个本地普通用户</a></li>
+    <li><a href="#添加archlinuxcn存储库">添加ArchLinuxCN存储库</a></li>
+    <li><a href="#安装驱动">安装驱动</a></li>
+    <li><a href="#安装桌面">安装桌面</a></li>
+  </ul>
+</nav>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var postToc = $(".post-toc");
+        if (postToc.length) {
+            var leftPos = $("#main").offset().left;
+            if (leftPos < 220) {
+                postToc.css({ "width": leftPos - 10, "margin-left": (0 - leftPos) })
+            }
+
+            var t = postToc.offset().top - 20,
+                a = {
+                    start: {
+                        position: "absolute",
+                        top: t
+                    },
+                    process: {
+                        position: "fixed",
+                        top: 20
+                    },
+                };
+            $(window).scroll(function () {
+                var e = $(window).scrollTop();
+                e < t ? postToc.css(a.start) : postToc.css(a.process)
+            })
+        }
+
+        if ($("#TableOfContents").children().length < 1) {
+            $(".post-toc").remove();
+        }
+    })
+</script>
+    <article class="post">
+        <header>
+            <h1 class="post-title">ArchLinux安装记录（2023.2.3）</h1>
+        </header>
+        
+  <time datetime="2023-02-02T17:09:43Z" class="post-meta meta-date dt-published">
+    2023-02-03
+  </time>
+
+
+
+        
+        <div class="post-meta">
+            <span id="busuanzi_container_page_pv">&nbsp;|
+                <span id="busuanzi_value_page_pv"></span> <span>reads</span>
+            </span>
+        </div>
+        
+        
+        <div class="post-content">
+            <h1 id="前言">前言</h1>
+<p>对安装Linux，我已经想过写教程很久了，一直没有时间，趁过年有空趁机写一篇，时间仓促，如有差错请敬请指正</p>
+<h1 id="安装前的准备">安装前的准备</h1>
+<ol>
+<li>一个大于4G的，最好是USB3.0的U盘</li>
+<li>一台x86_64的电脑，且用的是主流硬件</li>
+<li>尽量不用<em>英伟达</em>显卡</li>
+</ol>
+<p>先在 <a href="https://archlinux.org/download/">https://archlinux.org/download/</a> 下载一个Arch镜像，也可以在各大国内镜像站下载
+<figure class="max-w-2xl mx-auto overflow-hidden">
+    
+        <img alt="Arch Download" src="https://s1.ax1x.com/2023/02/08/pSRWy5j.png" />
+    
+    <figcaption class="p-2 text-center">Arch Download</figcaption>
+</figure>
+用工具烧录到U盘，推荐使用rufus或ventoy，然后进入bios选择第一启动项（截图丢失）<br>
+<strong>如果使用的是UEFI，请将安全启动关闭！</strong><br>
+接着会看到这样的界面：
+<figure class="max-w-2xl mx-auto overflow-hidden">
+    
+        <img alt="Live grub" src="https://s1.ax1x.com/2023/02/08/pSRfVL8.png" />
+    
+    <figcaption class="p-2 text-center">live grub</figcaption>
+</figure>
+选择第一项回车，进入Live环境，在这里我们可以维护系统，类似于WindowsPE
+<figure class="max-w-2xl mx-auto overflow-hidden">
+    
+        <img alt="Live" src="https://s1.ax1x.com/2023/02/08/pSRfKij.png" />
+    
+    <figcaption class="p-2 text-center">Live</figcaption>
+</figure>
+恭喜你！已经进入了Live环境</p>
+<h1 id="正式安装">正式安装</h1>
+<p>事实上，Arch安装并不难，只需要理解每一步是做什么的，我跪在这里拆解并解释每一步是干什么的</p>
+<h2 id="连接网络">连接网络</h2>
+<p>先让我们连上网络，输入以下命令</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>iwctl   //会进入联网模式
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">[</span>iwd<span style="color:#000;font-weight:bold">]</span><span style="color:#998;font-style:italic"># help    # 可以查看帮助</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">[</span>iwd<span style="color:#000;font-weight:bold">]</span><span style="color:#998;font-style:italic"># device list    # 列出你的无线设备名称，一般以wlan0命名</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">[</span>iwd<span style="color:#000;font-weight:bold">]</span><span style="color:#998;font-style:italic"># station wlan0 scan    # 扫描当前环境下的网络</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">[</span>iwd<span style="color:#000;font-weight:bold">]</span><span style="color:#998;font-style:italic"># station wlan0 get-networks    # 会显示你扫描到的所有网络</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">[</span>iwd<span style="color:#000;font-weight:bold">]</span><span style="color:#998;font-style:italic"># station wlan0 connect &lt;Wifi名&gt;</span>
+</span></span><span style="display:flex;"><span>password:输入密码
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">[</span>iwd<span style="color:#000;font-weight:bold">]</span><span style="color:#998;font-style:italic"># exit    # 退出当前模式，回到安装模式</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>确认一下有没有成功连上网络</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ping bilibili.com
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="切换镜像源">切换镜像源</h2>
+<p>为了速战速决，我直接使用工具来自动切换镜像源各位也可以在各大镜像源寻找他们的Arch镜像，保存在 /etc/pacman.d/mirrorlist</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>reflector --country China --age <span style="color:#099">72</span> --sort rate --protocol https --save /etc/pacman.d/mirrorlist //每72小时自动切换访问最快的镜像源，只保存https
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="更新系统时间">更新系统时间</h2>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>timedatectl set-ntp <span style="color:#0086b3">true</span> <span style="color:#998;font-style:italic"># 启用NTP服务</span>
+</span></span><span style="display:flex;"><span>timedatectl status <span style="color:#998;font-style:italic"># 检查服务状态</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="磁盘分区">磁盘分区</h2>
+<p>Arch镜像内置了fdisk和cfdisk，我使用cfdisk以帮助各位理解<br>
+先输入lsblk验证自己电脑内的硬盘，比如我的
+<figure class="max-w-2xl mx-auto overflow-hidden">
+    
+        <img alt="硬盘" src="https://s1.ax1x.com/2023/02/08/pSRfeeS.png" />
+    
+    <figcaption class="p-2 text-center">硬盘</figcaption>
+</figure>
+其中20G的sda就是我的硬盘，当然你的可能不同
+然后输入<code>cfdisk /dev/sda </code>（sda可以换成你的硬盘名）
+<figure class="max-w-2xl mx-auto overflow-hidden">
+    
+        <img alt="cfdisk" src="https://s1.ax1x.com/2023/02/08/pSRfAQP.png" />
+    
+    <figcaption class="p-2 text-center">cfdisk</figcaption>
+</figure>
+选择GPT，回车
+<figure class="max-w-2xl mx-auto overflow-hidden">
+    
+        <img alt="sda的分区" src="https://s1.ax1x.com/2023/02/08/pSRfEsf.png" />
+    
+    <figcaption class="p-2 text-center">sda的分区</figcaption>
+</figure>
+这就是你的硬盘了！现在开始分区，选择new，回车
+<figure class="max-w-2xl mx-auto overflow-hidden">
+    
+        <img alt="第一个分区" src="https://s1.ax1x.com/2023/02/08/pSRfFzt.png" />
+    
+    <figcaption class="p-2 text-center">第一个分区</figcaption>
+</figure>
+输入256m，回车，选择Type，然后修改为EFI系统分区
+<figure class="max-w-2xl mx-auto overflow-hidden">
+    
+        <img alt="EFI system" src="https://s1.ax1x.com/2023/02/08/pSRfmdg.png" />
+    
+    <figcaption class="p-2 text-center">EFI system</figcaption>
+</figure>
+重复之前的步骤，建立swap分区和root分区，完成之后如下图
+<figure class="max-w-2xl mx-auto overflow-hidden">
+    
+        <img alt="分区完成" src="https://s1.ax1x.com/2023/02/08/pSRfnoQ.png" />
+    
+    <figcaption class="p-2 text-center">分区完成</figcaption>
+</figure>
+分区完成之后选择write，回车后输入yes确认修改，然后选择quit退出（可以输入<code>lsblk</code>确认分区完毕）</p>
+<h2 id="格式化分区">格式化分区</h2>
+<p>将EFI分区格式化为Fat32格式</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>mkfs.fat -F <span style="color:#099">32</span> /dev/sda1
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>root分区格式化为xfs格式</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>mkfs.xfs -f /dev/sda3
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>当然也可以格式化为别的格式，比如ext4<br>
+创建swap分区</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>mkswap /dev/sda2
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>（此处可以再lsblk查看分区情况）</p>
+<h2 id="挂载分区">挂载分区</h2>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>mount /dev/sda3 /mnt
+</span></span><span style="display:flex;"><span>mkdir -p /mnt/boot/efi
+</span></span><span style="display:flex;"><span>mount /dev/sda1 /mnt/boot/efi
+</span></span><span style="display:flex;"><span>swapon /dev/sda2 <span style="color:#998;font-style:italic"># 挂载swap</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="安装内核和其他软件">安装内核和其他软件</h2>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>pacstrap /mnt linux linux-firmware linux-headers base base-devel neovim git
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># 需要安装amd-ucode或intel-ucode，取决于你用的是什么牌子的处理器</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>解释一下
+linux和linux-headers为系统内核和头文件
+base和base-devel为系统编译打包，包括了许多常用工具
+neovim为文本编辑器，vim的分支，支持更多先进功能</p>
+<h2 id="生成fstap文件">生成fstap文件</h2>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>genfstap -U /mnt &gt;&gt; /mnt/etc/fstap
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="chroot进入新系统">Chroot进入新系统</h2>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>arch-chroot /mnt
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>现在系统已经算“安装完了”，但是还不能使用，我们还得做进一步的设置</p>
+<h1 id="系统设置">系统设置</h1>
+<p>在这里，我们将会进行配置本地化、引导、网络等</p>
+<h2 id="设置时区">设置时区</h2>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+</span></span><span style="display:flex;"><span>hwclock --systohc <span style="color:#998;font-style:italic"># 硬件时间同步</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="设置语言">设置语言</h2>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>nvim /etc/locale.gen
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># 将以下两行取消注释</span>
+</span></span><span style="display:flex;"><span>en_US.UTF8 UTF-8
+</span></span><span style="display:flex;"><span>zh_CN.UTF8 UTF-8
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># 退出neovim</span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># 执行</span>
+</span></span><span style="display:flex;"><span>locale-gen
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="设置环境变量">设置环境变量</h2>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#0086b3">echo</span> <span style="color:#d14">&#34;LANG=en_US.UTF-8&#34;</span> &gt; /etc/locale.conf <span style="color:#998;font-style:italic"># 可以换成你想要的语言，但可能乱码</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="系统命名">系统命名</h2>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#0086b3">echo</span> archlinux &gt; /etc/hostname <span style="color:#998;font-style:italic"># name // archlinux可以换成你想要的名字</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="生成hosts文件">生成hosts文件</h2>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>nvim /etc/hosts
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># 在文件内输入以下内容</span>
+</span></span><span style="display:flex;"><span>127.0.0.1 localhost
+</span></span><span style="display:flex;"><span>::1 localhost
+</span></span><span style="display:flex;"><span>127.0.1.1 archlinux.localdomain archlinux <span style="color:#998;font-style:italic"># 这里的archlinux是系统名字</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="安装必备包">安装必备包</h2>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>pacman -S grub efibootmgr efivar networkmanager
+</span></span><span style="display:flex;"><span>systemctl <span style="color:#0086b3">enable</span> NetworkManager <span style="color:#998;font-style:italic"># 启用NetworkManager</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="配置grub">配置grub</h2>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>grub-install /dev/sda
+</span></span><span style="display:flex;"><span>grub-mkconfig -o /boot/grub/grub.cfg
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="给root用户创建密码">给root用户创建密码</h2>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>passwd <span style="color:#998;font-style:italic"># 回车</span>
+</span></span><span style="display:flex;"><span>New password: <span style="color:#998;font-style:italic"># 在此处输入密码，不会显示</span>
+</span></span><span style="display:flex;"><span>Retype new password: <span style="color:#998;font-style:italic"># 重新输入密码，不会显示</span>
+</span></span><span style="display:flex;"><span>passwd: password updated successfully <span style="color:#998;font-style:italic">## 设置完成</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>然后</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#0086b3">exit</span>
+</span></span><span style="display:flex;"><span>shutdown now
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>关机后拔掉U盘，重新开机
+输入用户名root和root密码即可进入系统</p>
+<h1 id="优化">优化</h1>
+<p>其实这一块不一定要跟着做，这里只是为了让你的电脑更方便更安全</p>
+<h2 id="创建一个本地普通用户">创建一个本地普通用户</h2>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>useradd -m bob <span style="color:#998;font-style:italic"># 创建名叫bob的普通用户</span>
+</span></span><span style="display:flex;"><span>passwd bob <span style="color:#998;font-style:italic"># 给bob设置密码</span>
+</span></span><span style="display:flex;"><span>usermod -aG wheel,users,storage,power,lp,adm,optical bob <span style="color:#998;font-style:italic"># 给bob设置权限</span>
+</span></span><span style="display:flex;"><span><span style="color:#008080">EDITOR</span><span style="color:#000;font-weight:bold">=</span>nvim visudo 
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># 取消注释 %wheel ALL=(ALL:ALL) ALL</span>
+</span></span><span style="display:flex;"><span>%wheel <span style="color:#008080">ALL</span><span style="color:#000;font-weight:bold">=(</span>ALL:ALL<span style="color:#000;font-weight:bold">)</span> ALL
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="添加archlinuxcn存储库">添加ArchLinuxCN存储库</h2>
+<p>该仓库是由archlinux中文社区驱动的一个非官方的软件仓库。我们使用的很多软件都需要使用这个库去下载，各大镜像源都有提供，可以挑选您喜欢的进行添加</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">9
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>nvim /etc/pacman.conf
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># 在最后添加</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">[</span>archlinuxcn<span style="color:#000;font-weight:bold">]</span> 
+</span></span><span style="display:flex;"><span><span style="color:#008080">Server</span> <span style="color:#000;font-weight:bold">=</span> https://mirrors.sjtug.sjtu.edu.cn/archlinux-cn/<span style="color:#008080">$arch</span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># 顺便找到这一行，取消注释</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">[</span>multilib<span style="color:#000;font-weight:bold">]</span> 
+</span></span><span style="display:flex;"><span><span style="color:#008080">Include</span> <span style="color:#000;font-weight:bold">=</span> /etc/pacman.d/mirrorlist
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># 退出neovim</span>
+</span></span><span style="display:flex;"><span>pacman -Sy archlinuxcn-keyring <span style="color:#998;font-style:italic"># 安装GPD密匙</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>如果安装失败或安装慢，可以选择安装haveged</strong></p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>pacman -Syu haveged
+</span></span><span style="display:flex;"><span>systemctl <span style="color:#0086b3">enable</span> haveged
+</span></span><span style="display:flex;"><span>systemctl start haveged
+</span></span><span style="display:flex;"><span>rm -rf /etc/pacman.d/gnupg
+</span></span><span style="display:flex;"><span>pacman-key --init
+</span></span><span style="display:flex;"><span>pacman-key --populate archlinux
+</span></span><span style="display:flex;"><span>pacman-key --populate archlinuxcn
+</span></span><span style="display:flex;"><span>pacman -Syy
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="安装驱动">安装驱动</h2>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>pacman -S mesa vulkan-intell <span style="color:#998;font-style:italic"># Intel核显驱动</span>
+</span></span><span style="display:flex;"><span>pacman -S mesa nvidia<span style="color:#000;font-weight:bold">(</span>-lts<span style="color:#000;font-weight:bold">)</span> nvidia-settings nvidia-dkms nvidia-utils nvidia-prime <span style="color:#998;font-style:italic"># Nvidia显卡驱动</span>
+</span></span><span style="display:flex;"><span>pacman -S mesa xf86-video-amdgpu vulkan-radeon <span style="color:#998;font-style:italic"># AMD显卡驱动（不是ATI）</span>
+</span></span><span style="display:flex;"><span>pacman -S alsa-utils pulseaudio pulseaudio-bluetooth cups <span style="color:#998;font-style:italic"># 声卡驱动</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="安装桌面">安装桌面</h2>
+<p>现实服务有两个主流的，一个是xorg，一个是wayland</p>
+<p>xorg兼容性好，性能较差，wayland性能较好，兼容较差（一般情况下选择xorg问题少点）</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">9
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>pacman -S xorg
+</span></span><span style="display:flex;"><span>pacman -S ttf-dejavu ttf-droid ttf-hack ttf-font-awesome otf-font-awesome ttf-lato ttf-liberation ttf-linux-libertine ttf-opensans ttf-roboto ttf-ubuntu-font-family ttf-hannom noto-fonts noto-fonts-extra noto-fonts-emoji noto-fonts-cjk adobe-source-code-pro-fonts adobe-source-sans-fonts adobe-source-serif-fonts adobe-source-han-sans-cn-fonts adobe-source-han-sans-hk-fonts adobe-source-han-sans-tw-fonts adobe-source-han-serif-cn-fonts wqy-zenhei wqy-microhei <span style="color:#998;font-style:italic"># 一堆字体</span>
+</span></span><span style="display:flex;"><span>nvim /etc/profile.d/freetype2.sh
+</span></span><span style="display:flex;"><span>--------------------------------------------
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># 取消注释最后一句</span>
+</span></span><span style="display:flex;"><span><span style="color:#0086b3">export</span> <span style="color:#008080">FREETYPE_PROPERTIES</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;truetype:interpreter-version=40&#34;</span>
+</span></span><span style="display:flex;"><span>pacman -S xfce xfce-goodies lightdm lightdm-gtk-greeter
+</span></span><span style="display:flex;"><span>systemctl <span style="color:#0086b3">enable</span> lightdm
+</span></span><span style="display:flex;"><span>reboot
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>恭喜你，成功入坑Arch邪教！</p>
+
+        </div>
+
+        
+<div class="post-archive">
+    <ul class="post-copyright">
+        <li><strong>Author: </strong><a rel="author" href="http://www.fanka.eu.org">Fanka</a></li>
+        <li style="word-break:break-all"><strong>Link: </strong><a href="http://www.fanka.eu.org/posts/InstallArchLinux2023-2-3.html">http://www.fanka.eu.org/posts/InstallArchLinux2023-2-3.html</a></li>
+        <li><strong>License: </strong>This work is under a <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议</a>. Kindly fulfill the requirements of the aforementioned License when adapting or creating a derivative of this work.</li>
+    </ul>
+</div>
+<br/>
+
+
+
+        
+
+<div class="post-archive">
+    <h2>See Also</h2>
+    <ul class="listing">
+        
+        <li><a href="/posts/GithubPages&#43;Cloudflare.html">Github Pages&#43;Cloudflare部署指南</a></li>
+        
+    </ul>
+</div>
+
+
+        <div class="post-meta meta-tags">
+            
+            No tags
+            
+        </div>
+    </article>
+    
+    
+
+    
+    
+    
+    
+
+</div>
+
+                    <footer id="footer">
+    <div>
+        &copy; 2023 <a href="http://www.fanka.eu.org">Fanka By Fanka</a>
+        
+    </div>
+    <br />
+    <div>
+        <div class="github-badge">
+            <a href="https://gohugo.io/" target="_black" rel="nofollow"><span class="badge-subject">Powered by</span><span class="badge-value bg-blue">Hugo</span></a>
+        </div>
+        <div class="github-badge">
+            <a href="https://www.flysnow.org/" target="_black"><span class="badge-subject">Design by</span><span class="badge-value bg-brightgreen">飞雪无情</span></a>
+        </div>
+        <div class="github-badge">
+            <a href="https://github.com/flysnow-org/maupassant-hugo" target="_black"><span class="badge-subject">Theme</span><span class="badge-value bg-yellowgreen">Maupassant</span></a>
+        </div>
+    </div>
+</footer>
+
+
+    
+    
+    <script type="text/javascript">
+        window.MathJax = {
+            tex2jax: {
+                inlineMath: [['$', '$']],
+                processEscapes: true
+                }
+            };
+    </script>
+    <script src='//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
+
+<a id="rocket" href="#top"></a>
+<script type="text/javascript" src='/js/totop.js?v=0.0.0' async=""></script>
+<style type="text/css">
+div.highlight {
+    position: relative;
+    margin: 1em 0px;
+}
+
+.copy-code {
+    display: none;
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    color: rgba(255, 255, 255, 0.8);
+    background: rgba(78, 78, 78, 0.8);
+    border-radius: var(--radius);
+    padding: 0 5px;
+    font: inherit;
+    user-select: none;
+    cursor: pointer;
+    border: 0;
+    --radius: 8px;
+}
+
+div.highlight:hover .copy-code,pre:hover .copy-code {
+    display: block;
+}
+
+</style>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+
+
+    <script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
+
+
+
+
+    <script src='/js/douban.js'></script>
+
+                </div>
+
+                <div id="secondary">
+    <section class="widget">
+        <form id="search" action='http://www.fanka.eu.org/search' method="get" accept-charset="utf-8" target="_blank" _lpchecked="1">
+      
+      <input type="text" name="q" maxlength="20" placeholder="Search">
+      <input type="hidden" name="sitesearch" value="http://www.fanka.eu.org">
+      <button type="submit" class="submit icon-search"></button>
+</form>
+    </section>
+
+    <section class="widget">
+        <h3 class="widget-title">Latest articles</h3>
+<ul class="widget-list">
+    
+    <li>
+        <a href="http://www.fanka.eu.org/posts/InstallArchLinux2023-2-3.html" title="ArchLinux安装记录（2023.2.3）" target="_blank">ArchLinux安装记录（2023.2.3）</a>
+    </li>
+    
+    <li>
+        <a href="http://www.fanka.eu.org/posts/GithubPages&#43;Cloudflare.html" title="Github Pages&#43;Cloudflare部署指南" target="_blank">Github Pages&#43;Cloudflare部署指南</a>
+    </li>
+    
+</ul>
+    </section>
+
+    
+
+    <section class="widget">
+        <h3 class="widget-title"><a href='/categories/'>Categories</a></h3>
+<ul class="widget-list">
+    
+</ul>
+    </section>
+
+    <section class="widget">
+        <h3 class="widget-title"><a href='/tags/'>Tags</a></h3>
+<div class="tagcloud">
+    
+</div>
+    </section>
+
+    
+<section class="widget">
+    <h3 class="widget-title">Links</h3>
+    <ul class="widget-list">
+        
+        <li>
+            <a target="_blank" href="https://www.flysnow.org/" title="飞雪无情的博客">飞雪无情的博客</a>
+        </li>
+        
+    </ul>
+</section>
+
+
+    <section class="widget">
+        <h3 class="widget-title">Meta</h3>
+        <ul class="widget-list">
+            <li><a href="http://www.fanka.eu.org/index.xml">RSS</a></li>
+        </ul>
+    </section>
+</div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

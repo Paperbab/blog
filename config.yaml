@@ -1,0 +1,65 @@
+title: Fanka
+baseURL: http://www.fanka.eu.org
+uglyurls: true
+hasCJKLanguage: true
+languageCode: zh-CN
+theme: maupassant
+#googleAnalytics: ""
+preserveTaxonomyNames: true
+disablePathToLower: true
+summaryLength: 140
+#disqusShortname: yourdiscussshortname
+permalinks:
+  post: :title.html
+
+author:
+  name: Fanka
+params:
+  author: Fanka
+  subtitle: 一个学生的无聊日志
+  keywords: 技术\学生\无聊\日志
+  description: 一个什么都会，但什么都学不精的可怜学生
+  busuanzi: true
+#  googleAd: ""
+  localSearch: true
+  customCSS:
+    - douban.css
+    - other.css
+  customJS:
+    - douban.js
+  toc: true
+  links:
+    - title: 飞雪无情的博客
+      name: 飞雪无情的博客
+      url: https://www.flysnow.org/
+  cc:
+    name: 知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议
+    link: https://creativecommons.org/licenses/by-nc-nd/4.0/
+markup:
+  highlight:
+    lineNos: true
+    style: github
+#  utteranc:
+#    enable: true
+#    repo: your github repo
+#    issueTerm: pathname
+#    theme: github-light
+#  waline:
+#    enable: false
+#    placeholder: 说点什么吧...
+#    serverURL: Your waline serverURL
+menu:
+  main:
+    - identifier: posts
+      name: 文章
+      url: /posts/
+      weight: 1
+    - identifier: categories
+      name: 分类
+      url: /categories/
+      title: ""
+      weight: 2
+    - identifier: tags
+      name: 标签
+      url: /tags/
+      weight: 3
