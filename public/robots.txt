@@ -1,1 +1,2 @@
 User-agent: *
+Sitemap: http://www.fanka.eu.org/sitemap.xml
